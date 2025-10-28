@@ -9,34 +9,31 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Example route: home
+// Home route
 app.get('/', (req, res) => {
   res.json({ message: "AI Content Backend is running!" });
 });
 
-// Example route that simulates an error
+// Test error route using native DOMException
 app.get('/generate-error', (req, res, next) => {
   try {
-    // Throw a DOMException using Node's built-in version
     const error = new DOMException("Something went wrong with the generation", "InvalidStateError");
     throw error;
   } catch (err) {
-    next(err); // Pass the error to Express error handler
+    next(err);
   }
 });
 
-// Example AI endpoint (replace with your OpenAI logic)
+// AI generation route (example, replace with OpenAI API call)
 app.post('/generate', async (req, res, next) => {
   try {
     const { prompt } = req.body;
     if (!prompt) {
-      // Throw DOMException for invalid request
       throw new DOMException("Prompt is required", "InvalidStateError");
     }
 
-    // Dummy AI response (replace with your OpenAI API call)
+    // Example AI response (replace with actual OpenAI call)
     const aiResponse = `Generated content for: ${prompt}`;
-
     res.json({ result: aiResponse });
   } catch (err) {
     next(err);
@@ -52,9 +49,3 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
-app.get('/', (req, res) => {
-  res.send('Hello world');
-});
-
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
