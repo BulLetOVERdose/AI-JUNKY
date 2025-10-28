@@ -13,6 +13,3 @@
     "stripe": "^12.9.0"
   }
 }
-{
-  const error = new DOMException("Something went wrong", "InvalidStateError");
-}
