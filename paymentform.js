@@ -5,6 +5,7 @@ import axios from "axios";
 
 const stripePromise = loadStripe("your_publishable_key_here");
 
+
 const CheckoutForm = () => {
   const stripe = useStripe();
   const elements = useElements();
