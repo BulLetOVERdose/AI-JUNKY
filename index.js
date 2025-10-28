@@ -34,5 +34,12 @@ app.post('/generate', async (req, res) => {
 // Stripe Payment Endpoint
 app.post('/create-payment-intent', stripePaymentIntent);
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Backend running on port ${PORT}`));
+const express = require('express');
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.get('/', (req, res) => {
+  res.send('Hello world');
+});
+
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
