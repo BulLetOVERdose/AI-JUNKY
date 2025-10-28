@@ -1,42 +1,57 @@
-require('dotenv').config();
+// index.js
 const express = require('express');
 const cors = require('cors');
-const { Configuration, OpenAIApi } = require('openai');
-const { stripePaymentIntent } = require('./stripe');
+require('dotenv').config();
 
 const app = express();
-app.use(cors({ origin: process.env.FRONTEND_URL }));
+const PORT = process.env.PORT || 3000;
+
+app.use(cors());
 app.use(express.json());
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY
+// Example route: home
+app.get('/', (req, res) => {
+  res.json({ message: "AI Content Backend is running!" });
 });
-const openai = new OpenAIApi(configuration);
 
-// AI Content Generation Endpoint
-app.post('/generate', async (req, res) => {
-  const { prompt } = req.body;
-  if (!prompt) return res.status(400).json({ error: 'Prompt required' });
-
+// Example route that simulates an error
+app.get('/generate-error', (req, res, next) => {
   try {
-    const response = await openai.createChatCompletion({
-      model: "gpt-4",
-      messages: [{ role: "user", content: prompt }],
-      max_tokens: 500
-    });
-    res.json({ output: response.data.choices[0].message.content });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'AI request failed' });
+    // Throw a DOMException using Node's built-in version
+    const error = new DOMException("Something went wrong with the generation", "InvalidStateError");
+    throw error;
+  } catch (err) {
+    next(err); // Pass the error to Express error handler
   }
 });
 
-// Stripe Payment Endpoint
-app.post('/create-payment-intent', stripePaymentIntent);
+// Example AI endpoint (replace with your OpenAI logic)
+app.post('/generate', async (req, res, next) => {
+  try {
+    const { prompt } = req.body;
+    if (!prompt) {
+      // Throw DOMException for invalid request
+      throw new DOMException("Prompt is required", "InvalidStateError");
+    }
 
-const express = require('express');
-const app = express();
-const PORT = process.env.PORT || 3000;
+    // Dummy AI response (replace with your OpenAI API call)
+    const aiResponse = `Generated content for: ${prompt}`;
+
+    res.json({ result: aiResponse });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error(err.name, err.message);
+  res.status(500).json({ error: err.name, message: err.message });
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
 
 app.get('/', (req, res) => {
   res.send('Hello world');
