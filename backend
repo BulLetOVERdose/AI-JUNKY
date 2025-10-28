@@ -1,4 +1,16 @@
-cd backend
-npm init -y
-npm install express dotenv openai cors
+{
+  "name": "ai-content-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "openai": "^4.11.0",
+    "stripe": "^12.12.0"
+  }
+}
 
